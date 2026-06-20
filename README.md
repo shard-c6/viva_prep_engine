@@ -104,7 +104,7 @@ We have meticulously documented the internal architecture, API contracts, and th
 
 ## 👤 Author
 
-**Aashiq Engineer**  
+**Shardul Chogale**  
 Computer Engineering • VIT Mumbai
 
 ## 📝 License
