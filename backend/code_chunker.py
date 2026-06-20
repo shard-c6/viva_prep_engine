@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — Code Chunker
+VERA — Code Chunker
 Filters, validates, and aggregates code files into AI-ready context blocks.
 """
 

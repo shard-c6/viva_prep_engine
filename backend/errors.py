@@ -1,11 +1,11 @@
 """
-Viva Prep Engine — Custom Exceptions
+VERA — Custom Exceptions
 Typed error hierarchy for the Lambda worker pipeline.
 """
 
 
 class VivaEngineError(Exception):
-    """Base exception for all Viva Prep Engine errors."""
+    """Base exception for all VERA errors."""
 
     def __init__(self, message: str, error_code: str):
         super().__init__(message)

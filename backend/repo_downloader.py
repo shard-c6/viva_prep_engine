@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — GitHub Repository Downloader
+VERA — GitHub Repository Downloader
 Downloads repository tarballs from GitHub's public API.
 """
 

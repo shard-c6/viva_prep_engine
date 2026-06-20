@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — Gemini AI Engine
+VERA — Gemini AI Engine
 Handles communication with Google's Gemini API for codebase analysis.
 """
 

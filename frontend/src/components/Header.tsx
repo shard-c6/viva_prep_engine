@@ -29,7 +29,7 @@ export default function Header({ user }: HeaderProps) {
     <header className="header" id="main-header">
       <Link href="/" className="header-logo">
         <span className="header-logo-icon">🎓</span>
-        <span>Viva<span className="gradient-text">Prep</span></span>
+        <span>VERA</span>
       </Link>
 
       <nav className="header-nav">

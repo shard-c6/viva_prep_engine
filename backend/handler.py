@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — Lambda Handler
+VERA (Viva Evaluation and Report Automator) — Lambda Handler
 Entry point for the AWS Lambda function triggered by SQS.
 """
 

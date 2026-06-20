@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — JSON Schemas for AI Output
+VERA — JSON Schemas for AI Output
 Defines the enforced response schema for Gemini API calls.
 """
 

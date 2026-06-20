@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — Database Writer
+VERA — Database Writer
 Handles all Supabase write operations using the service_role key.
 """
 

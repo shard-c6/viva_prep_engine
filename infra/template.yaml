@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Viva Prep Engine — Serverless Backend
+  VERA (Viva Evaluation and Report Automator) — Serverless Backend
   Async codebase analysis pipeline: API Gateway → SQS → Lambda → Gemini AI → Supabase
 
 # ============================================
@@ -95,7 +95,7 @@ Resources:
   AnalyzeApi:
     Type: AWS::Serverless::Api
     Properties:
-      Name: viva-prep-api
+      Name: vera-api
       StageName: prod
       Cors:
         AllowOrigin: !Sub "'${AllowedOrigin}'"

@@ -1,6 +1,6 @@
-# Viva Prep Engine — Setup & Deployment Guide (Phase 2)
+# VERA — Setup & Deployment Guide (Phase 2)
 
-Welcome to Phase 2! To get the Viva Prep Engine running, you need to configure the external services (Supabase, GitHub, Gemini) and deploy the AWS infrastructure.
+Welcome to Phase 2! To get VERA (Viva Evaluation and Report Automator) running, you need to configure the external services (Supabase, GitHub, Gemini) and deploy the AWS infrastructure.
 
 Follow these steps in order.
 
@@ -32,7 +32,7 @@ Ensure you have the following installed on your local machine:
 
 ### A. OAuth App (for User Login)
 1. Go to your GitHub account **Settings -> Developer Settings -> OAuth Apps -> New OAuth App**.
-2. Application name: `Viva Prep Engine`
+2. Application name: `VERA`
 3. Homepage URL: `http://localhost:3000` (Update to your Vercel URL later)
 4. Authorization callback URL: `https://<YOUR_SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback`
 5. Click **Register application**.

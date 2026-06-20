@@ -1,5 +1,5 @@
 -- =============================================
--- Viva Prep Engine — Database Schema (V1)
+-- VERA — Database Schema (V1)
 -- =============================================
 -- Run this migration against your Supabase project.
 -- Execute via Supabase SQL Editor or `supabase db push`.

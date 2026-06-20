@@ -1,6 +1,6 @@
-# Repo-to-Report & Viva Prep Engine — Master Blueprint v2.0
+# VERA (Viva Evaluation and Report Automator) — Master Blueprint v2.0
 
-**Project Codename:** Viva Prep Engine
+**Project Codename:** VERA
 **Lead Architect:** Aashiq Engineer
 **Document Version:** 2.1 (APPROVED — All decisions locked)
 **Last Updated:** 2026-06-20
@@ -740,7 +740,7 @@ sequenceDiagram
 # infra/template.yaml (simplified)
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Viva Prep Engine - Serverless Backend
+Description: VERA - Serverless Backend
 
 Globals:
   Function:

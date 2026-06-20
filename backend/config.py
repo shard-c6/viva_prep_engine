@@ -1,5 +1,5 @@
 """
-Viva Prep Engine — Configuration Management
+VERA — Configuration Management
 Loads environment variables with validation.
 """
 
