@@ -18,7 +18,12 @@ export default async function LandingPage() {
         .select('*')
         .eq('id', authUser.id)
         .single()
-      user = profile
+      user = profile || {
+        id: authUser.id,
+        github_username: authUser.user_metadata?.user_name || authUser.email?.split('@')[0] || 'User',
+        avatar_url: authUser.user_metadata?.avatar_url || '',
+        created_at: authUser.created_at,
+      }
     }
   } catch {
     // Not logged in

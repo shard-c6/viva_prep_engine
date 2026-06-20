@@ -45,7 +45,16 @@ export default function DashboardPage() {
         .eq('id', authUser.id)
         .single()
 
-      if (profile) setUser(profile as UserProfile)
+      if (profile) {
+        setUser(profile as UserProfile)
+      } else {
+        setUser({
+          id: authUser.id,
+          github_username: authUser.user_metadata?.user_name || authUser.email?.split('@')[0] || 'User',
+          avatar_url: authUser.user_metadata?.avatar_url || '',
+          created_at: authUser.created_at,
+        })
+      }
 
       await fetchJobs(authUser.id)
       setLoading(false)
