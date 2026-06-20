@@ -17,7 +17,7 @@ export default function GSAPAnimations() {
         .fromTo('.hero-cta', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }, '-=0.4')
 
       // Features parallax & storytelling
-      gsap.utils.toArray('.feature-card').forEach((card) => {
+      gsap.utils.toArray<HTMLElement>('.feature-card').forEach((card) => {
         gsap.fromTo(card, 
           { y: 50, opacity: 0 },
           {
@@ -35,7 +35,7 @@ export default function GSAPAnimations() {
       })
 
       // How it works steps
-      gsap.utils.toArray('.step-card').forEach((step, i) => {
+      gsap.utils.toArray<HTMLElement>('.step-card').forEach((step, i) => {
         gsap.fromTo(step,
           { x: -30, opacity: 0 },
           {
