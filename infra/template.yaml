@@ -1,0 +1,197 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Viva Prep Engine — Serverless Backend
+  Async codebase analysis pipeline: API Gateway → SQS → Lambda → Gemini AI → Supabase
+
+# ============================================
+# Parameters (secrets passed at deploy time)
+# ============================================
+Parameters:
+  GeminiApiKey:
+    Type: String
+    NoEcho: true
+    Description: Google Gemini API key for AI analysis
+
+  SupabaseUrl:
+    Type: String
+    Description: Supabase project URL (e.g., https://xyz.supabase.co)
+
+  SupabaseServiceKey:
+    Type: String
+    NoEcho: true
+    Description: Supabase service_role key (bypasses RLS)
+
+  GitHubPat:
+    Type: String
+    NoEcho: true
+    Description: GitHub bot account Personal Access Token
+
+  AllowedOrigin:
+    Type: String
+    Default: '*'
+    Description: CORS allowed origin (set to your Vercel domain in production)
+
+# ============================================
+# Global Function Settings
+# ============================================
+Globals:
+  Function:
+    Timeout: 300          # 5 minutes max for large repos
+    MemorySize: 512       # MB — sufficient for tarball extraction
+    Runtime: python3.12
+    Architectures:
+      - x86_64
+
+# ============================================
+# Resources
+# ============================================
+Resources:
+
+  # --- SQS Queue (Message Broker) ---
+  AnalysisQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: viva-analysis-queue
+      VisibilityTimeout: 360   # Lambda timeout (300s) + 60s buffer
+      MessageRetentionPeriod: 86400  # 24 hours
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn
+        maxReceiveCount: 3     # Retry 3 times before DLQ
+
+  # --- Dead Letter Queue (Failed messages) ---
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: viva-analysis-dlq
+      MessageRetentionPeriod: 1209600  # 14 days for debugging
+
+  # --- Lambda Worker Function ---
+  AnalyzerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: viva-analyzer
+      Description: Processes GitHub repos, calls Gemini AI, writes reports to Supabase
+      Handler: handler.lambda_handler
+      CodeUri: ../backend/
+      Environment:
+        Variables:
+          GEMINI_API_KEY: !Ref GeminiApiKey
+          SUPABASE_URL: !Ref SupabaseUrl
+          SUPABASE_SERVICE_KEY: !Ref SupabaseServiceKey
+          GITHUB_PAT: !Ref GitHubPat
+      Policies:
+        - SQSPollerPolicy:
+            QueueName: !GetAtt AnalysisQueue.QueueName
+      Events:
+        SQSTrigger:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt AnalysisQueue.Arn
+            BatchSize: 1         # Process one repo at a time
+            Enabled: true
+
+  # --- API Gateway (Ingestion Endpoint) ---
+  AnalyzeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: viva-prep-api
+      StageName: prod
+      Cors:
+        AllowOrigin: !Sub "'${AllowedOrigin}'"
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+
+  # --- API Gateway → SQS Integration Function ---
+  # This lightweight Lambda simply drops the message into SQS
+  # and returns 202 Accepted immediately
+  IngestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: viva-ingest
+      Description: Receives analysis requests and drops them into SQS
+      Handler: index.handler
+      Runtime: python3.12
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          QUEUE_URL: !Ref AnalysisQueue
+      Policies:
+        - SQSSendMessagePolicy:
+            QueueName: !GetAtt AnalysisQueue.QueueName
+      Events:
+        AnalyzePost:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AnalyzeApi
+            Path: /analyze
+            Method: POST
+      InlineCode: |
+        import json
+        import os
+        import boto3
+
+        sqs = boto3.client('sqs')
+        QUEUE_URL = os.environ['QUEUE_URL']
+
+        def handler(event, context):
+            try:
+                body = json.loads(event.get('body', '{}'))
+
+                # Validate required fields
+                required = ['job_id', 'repo_url', 'tech_stack', 'viva_difficulty']
+                missing = [f for f in required if f not in body]
+                if missing:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': 'INVALID_REQUEST', 'missing': missing})
+                    }
+
+                # Send to SQS
+                sqs.send_message(
+                    QueueUrl=QUEUE_URL,
+                    MessageBody=json.dumps(body),
+                    MessageGroupId=body.get('job_id', 'default')  # For FIFO if needed later
+                )
+
+                return {
+                    'statusCode': 202,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({
+                        'message': 'Analysis queued successfully',
+                        'job_id': body['job_id']
+                    })
+                }
+
+            except Exception as e:
+                return {
+                    'statusCode': 500,
+                    'headers': {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': 'INTERNAL_ERROR', 'message': str(e)})
+                }
+
+# ============================================
+# Outputs
+# ============================================
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${AnalyzeApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+
+  AnalysisQueueUrl:
+    Description: SQS Queue URL
+    Value: !Ref AnalysisQueue
+
+  AnalysisQueueArn:
+    Description: SQS Queue ARN
+    Value: !GetAtt AnalysisQueue.Arn
+
+  DeadLetterQueueUrl:
+    Description: Dead Letter Queue URL
+    Value: !Ref DeadLetterQueue
+
+  AnalyzerFunctionArn:
+    Description: Lambda Analyzer function ARN
+    Value: !GetAtt AnalyzerFunction.Arn

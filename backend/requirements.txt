@@ -1,0 +1,6 @@
+# No external dependencies required for V1.
+# The Lambda worker uses only Python stdlib (urllib, json, tarfile, os, etc.)
+# and the Gemini REST API directly.
+#
+# If you add dependencies later, list them here and use
+# `pip install -r requirements.txt -t ./package/` for Lambda packaging.
