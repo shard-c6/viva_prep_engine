@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from '@/lib/types'
 
 interface JobStatusCardProps {
   job: Job
+  onDelete?: (jobId: string) => void
 }
 
 function formatTime(dateString: string): string {
@@ -36,11 +37,19 @@ function StatusBadge({ status }: { status: Job['status'] }) {
   )
 }
 
-export default function JobStatusCard({ job }: JobStatusCardProps) {
+export default function JobStatusCard({ job, onDelete }: JobStatusCardProps) {
   const isClickable = job.status === 'completed'
   const errorMessage = job.error_code
     ? ERROR_MESSAGES[job.error_code] || job.error_message || 'An error occurred'
     : null
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (confirm('Are you sure you want to delete this analysis? This action cannot be undone.')) {
+      onDelete?.(job.id)
+    }
+  }
 
   const content = (
     <div className={`job-card card ${isClickable ? '' : ''}`} id={`job-${job.id}`}>
@@ -71,8 +80,18 @@ export default function JobStatusCard({ job }: JobStatusCardProps) {
 
       <div className="job-card-actions">
         <StatusBadge status={job.status} />
+        {onDelete && (
+          <button 
+            onClick={handleDelete} 
+            className="btn btn-ghost" 
+            style={{ padding: '4px 8px', color: 'var(--error)', marginLeft: 'var(--space-sm)' }}
+            title="Delete analysis"
+          >
+            🗑️
+          </button>
+        )}
         {isClickable && (
-          <span style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}>→</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: '1.2rem', marginLeft: 'var(--space-xs)' }}>→</span>
         )}
       </div>
     </div>

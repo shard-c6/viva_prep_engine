@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import Header from '@/components/Header'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
+import GetStartedButton from '@/components/GetStartedButton'
+import GSAPAnimations from '@/components/GSAPAnimations'
+
 
 export default async function LandingPage() {
   let user = null
@@ -24,6 +27,7 @@ export default async function LandingPage() {
   return (
     <>
       <Header user={user} />
+      <GSAPAnimations />
 
       <main>
         {/* Hero Section */}
@@ -48,12 +52,10 @@ export default async function LandingPage() {
                 🎯 Go to Dashboard
               </Link>
             ) : (
-              <Link href="#features" className="btn btn-primary btn-lg" id="cta-get-started">
-                Get Started — It&apos;s Free
-              </Link>
+              <GetStartedButton />
             )}
             <a
-              href="https://github.com"
+              href="https://github.com/shard-c6/VERA"
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-secondary btn-lg"
@@ -94,7 +96,7 @@ export default async function LandingPage() {
         </section>
 
         {/* How It Works */}
-        <section style={{
+        <section className="how-it-works" style={{
           maxWidth: 'var(--max-width)',
           margin: '0 auto',
           padding: 'var(--space-3xl) var(--space-lg)',
@@ -117,7 +119,7 @@ export default async function LandingPage() {
               { step: '03', title: 'AI Analyzes', desc: 'Our cloud pipeline processes your code' },
               { step: '04', title: 'Get Results', desc: 'View your report, architecture table & flashcards' },
             ].map((item) => (
-              <div key={item.step} style={{ padding: 'var(--space-lg)' }}>
+              <div key={item.step} className="step-card" style={{ padding: 'var(--space-lg)' }}>
                 <div style={{
                   fontSize: '2.5rem',
                   fontWeight: 800,

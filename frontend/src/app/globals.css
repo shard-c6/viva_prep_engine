@@ -958,8 +958,79 @@ a:hover {
   border: 2px solid var(--border);
   border-top-color: var(--accent-primary);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 1s linear infinite;
 }
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+.print-layout {
+  padding: 0;
+  margin: 0;
+  background: white;
+  color: black;
+}
+
+.print-page {
+  padding: 2cm;
+  background: white;
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+.print-section-title {
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.print-table th,
+.print-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.print-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.print-flashcard {
+  border: 1px solid #eee;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .print-page {
+    padding: 0;
+  }
+  /* Hide UI elements during print */
+  header, .btn, .report-tabs {
+    display: none !important;
+  }
+  @page {
+    margin: 1.5cm;
+  }
+}
+
 
 @keyframes spin {
   to { transform: rotate(360deg); }

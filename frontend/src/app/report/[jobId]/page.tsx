@@ -98,16 +98,27 @@ export default function ReportPage() {
 
       <div className="report" id="report-view">
         <div className="report-header">
-          <Link
-            href="/dashboard"
-            className="btn btn-ghost"
-            style={{ marginBottom: 'var(--space-md)', display: 'inline-flex' }}
-          >
-            ← Back to Dashboard
-          </Link>
-          <div className="report-repo-name">
-            <span>📁</span>
-            {job.repo_owner}/{job.repo_name}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <Link
+                href="/dashboard"
+                className="btn btn-ghost"
+                style={{ marginBottom: 'var(--space-md)', display: 'inline-flex' }}
+              >
+                ← Back to Dashboard
+              </Link>
+              <div className="report-repo-name">
+                <span>📁</span>
+                {job.repo_owner}/{job.repo_name}
+              </div>
+            </div>
+            <Link
+              href={`/report/${job.id}/print`}
+              target="_blank"
+              className="btn btn-primary"
+            >
+              📥 Download PDF Report
+            </Link>
           </div>
           <div style={{
             display: 'flex',

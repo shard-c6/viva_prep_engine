@@ -54,6 +54,16 @@ export default function DashboardPage() {
     init()
   }, [router, fetchJobs])
 
+  const handleDeleteJob = async (jobId: string) => {
+    const supabase = createClient()
+    const { error } = await supabase.from('jobs').delete().eq('id', jobId)
+    if (!error && userId) {
+      fetchJobs(userId)
+    } else if (error) {
+      alert('Failed to delete job: ' + error.message)
+    }
+  }
+
   // Polling for active jobs
   useEffect(() => {
     if (!userId) return
@@ -109,7 +119,7 @@ export default function DashboardPage() {
           ) : (
             <div className="jobs-list">
               {jobs.map((job) => (
-                <JobStatusCard key={job.id} job={job} />
+                <JobStatusCard key={job.id} job={job} onDelete={handleDeleteJob} />
               ))}
             </div>
           )}
