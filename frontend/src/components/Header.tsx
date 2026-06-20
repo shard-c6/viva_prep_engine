@@ -40,6 +40,7 @@ export default function Header({ user }: HeaderProps) {
             </Link>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               {user.avatar_url && (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={user.avatar_url}
                   alt={user.github_username}

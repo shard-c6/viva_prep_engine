@@ -30,8 +30,11 @@ export function useJobPolling(userId: string | null) {
   }, [userId])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchJobs()
+  }, [fetchJobs])
 
+  useEffect(() => {
     // Poll if there are any active jobs
     const hasActiveJobs = jobs.some(
       (j) => j.status === 'queued' || j.status === 'processing'
@@ -41,7 +44,7 @@ export function useJobPolling(userId: string | null) {
       const interval = setInterval(fetchJobs, 4000)
       return () => clearInterval(interval)
     }
-  }, [fetchJobs, jobs.length, jobs.some?.(j => j.status === 'queued' || j.status === 'processing')])
+  }, [jobs, fetchJobs])
 
   return { jobs, loading, refetch: fetchJobs }
 }
