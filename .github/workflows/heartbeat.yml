@@ -1,0 +1,23 @@
+name: Daily Heartbeat Tracker
+
+on:
+  schedule:
+    # Run daily at 00:05 UTC (05:35 IST)
+    - cron: '5 0 * * *'
+  workflow_dispatch: # Enable manual triggering from GitHub UI
+
+jobs:
+  heartbeat:
+    name: Log daily heartbeat
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push commits back to the repository
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Heartbeat Script
+        run: |
+          ./scripts/heartbeat.sh --commit
