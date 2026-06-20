@@ -1,7 +1,7 @@
 # VERA (Viva Evaluation and Report Automator) — Master Blueprint v2.0
 
 **Project Codename:** VERA
-**Lead Architect:** Aashiq Engineer
+**Lead Architect:** Shardul Chogale
 **Document Version:** 2.1 (APPROVED — All decisions locked)
 **Last Updated:** 2026-06-20
 **Status:** ✅ APPROVED

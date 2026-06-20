@@ -3,7 +3,7 @@
   <p><b>Transform raw GitHub repositories into structured architecture breakdowns, project reports, and personalized Viva flashcards.</b></p>
 
   <p>
-    <a href="https://github.com/aashiq-engineer/viva-prep-engine"><img src="https://img.shields.io/badge/status-Phase%201%20Complete-success?style=for-the-badge" alt="Status" /></a>
+    <a href="https://github.com/shard-c6/VERA"><img src="https://img.shields.io/badge/status-Phase%201%20Complete-success?style=for-the-badge" alt="Status" /></a>
     <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Frontend-Next.js%2015-black?style=for-the-badge&logo=next.js" alt="Next.js" /></a>
     <a href="https://aws.amazon.com/lambda/"><img src="https://img.shields.io/badge/Backend-AWS%20Lambda-orange?style=for-the-badge&logo=amazonaws" alt="AWS" /></a>
     <a href="https://deepmind.google/technologies/gemini/"><img src="https://img.shields.io/badge/AI-Gemini%202.5%20Flash--Lite-blue?style=for-the-badge&logo=google" alt="Gemini" /></a>

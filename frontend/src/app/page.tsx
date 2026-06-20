@@ -146,7 +146,7 @@ export default async function LandingPage() {
           zIndex: 1,
         }}>
           <p>
-            Built by <strong style={{ color: 'var(--text-secondary)' }}>Aashiq Engineer</strong> — VIT Mumbai, Computer Engineering
+            Built by <strong style={{ color: 'var(--text-secondary)' }}>Shardul Chogale</strong> — VIT Mumbai, Computer Engineering
           </p>
           <p style={{ marginTop: 'var(--space-sm)' }}>
             Powered by Gemini AI · AWS Lambda · Supabase
