@@ -1,31 +1,22 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import SubmissionForm from '@/components/SubmissionForm'
 import JobStatusCard from '@/components/JobStatusCard'
+import { useJobSubscription } from '@/hooks/useJobSubscription'
 import { createClient } from '@/lib/supabase'
-import type { UserProfile, Job } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = useState<UserProfile | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
-  const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchJobs = useCallback(async (uid: string) => {
-    const supabase = createClient()
-    const { data } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('user_id', uid)
-      .order('created_at', { ascending: false })
-      .limit(50)
-
-    if (data) setJobs(data as Job[])
-  }, [])
+  // V2: Supabase Realtime subscription replaces polling
+  const { jobs, refetch } = useJobSubscription(userId)
 
   useEffect(() => {
     const init = async () => {
@@ -56,36 +47,21 @@ export default function DashboardPage() {
         })
       }
 
-      await fetchJobs(authUser.id)
       setLoading(false)
     }
 
     init()
-  }, [router, fetchJobs])
+  }, [router])
 
   const handleDeleteJob = async (jobId: string) => {
     const supabase = createClient()
     const { error } = await supabase.from('jobs').delete().eq('id', jobId)
-    if (!error && userId) {
-      fetchJobs(userId)
-    } else if (error) {
+    if (!error) {
+      refetch()
+    } else {
       alert('Failed to delete job: ' + error.message)
     }
   }
-
-  // Polling for active jobs
-  useEffect(() => {
-    if (!userId) return
-
-    const hasActive = jobs.some(
-      (j) => j.status === 'queued' || j.status === 'processing'
-    )
-
-    if (hasActive) {
-      const interval = setInterval(() => fetchJobs(userId), 4000)
-      return () => clearInterval(interval)
-    }
-  }, [userId, jobs, fetchJobs])
 
   if (loading) {
     return (
@@ -112,7 +88,7 @@ export default function DashboardPage() {
 
         <SubmissionForm
           userId={userId!}
-          onSubmitted={() => fetchJobs(userId!)}
+          onSubmitted={() => refetch()}
         />
 
         <div style={{ marginTop: 'var(--space-xl)' }}>
