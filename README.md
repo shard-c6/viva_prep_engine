@@ -39,7 +39,7 @@ flowchart LR
     E -->|1. Download Repo| F[GitHub API]
     E -->|2. Analyze Code| G[Gemini 2.5]
     E -->|3. Save Report| B
-    B ===>|4. Realtime Status Update (V2)| A
+    B ==|4. Realtime Status Update (V2)| A
     A -->|5. Local window.print (V2)| H[Offline PDF Report]
 ```
 
