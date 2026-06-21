@@ -3,8 +3,8 @@
   <p><b>Transform raw GitHub repositories into structured architecture breakdowns, project reports, and personalized Viva flashcards.</b></p>
 
   <p>
-    <a href="https://github.com/shard-c6/VERA"><img src="https://img.shields.io/badge/status-Phase%201%20Complete-success?style=for-the-badge" alt="Status" /></a>
-    <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Frontend-Next.js%2015-black?style=for-the-badge&logo=next.js" alt="Next.js" /></a>
+    <a href="https://github.com/shard-c6/VERA"><img src="https://img.shields.io/badge/status-Phase%203%20%26%20V2%20Complete-success?style=for-the-badge" alt="Status" /></a>
+    <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Frontend-Next.js%2016-black?style=for-the-badge&logo=next.js" alt="Next.js" /></a>
     <a href="https://aws.amazon.com/lambda/"><img src="https://img.shields.io/badge/Backend-AWS%20Lambda-orange?style=for-the-badge&logo=amazonaws" alt="AWS" /></a>
     <a href="https://deepmind.google/technologies/gemini/"><img src="https://img.shields.io/badge/AI-Gemini%202.5%20Flash--Lite-blue?style=for-the-badge&logo=google" alt="Gemini" /></a>
     <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Database-Supabase-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase" /></a>
@@ -39,20 +39,25 @@ flowchart LR
     E -->|1. Download Repo| F[GitHub API]
     E -->|2. Analyze Code| G[Gemini 2.5]
     E -->|3. Save Report| B
+    B ===>|4. Realtime Status Update (V2)| A
+    A -->|5. Local window.print (V2)| H[Offline PDF Report]
 ```
 
 ### Tech Stack Matrix
 
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| **Frontend** | Next.js 15 (App Router) | Responsive dashboard & job polling |
-| **Auth** | GitHub OAuth via Supabase | Secure identity management |
-| **API Gateway** | AWS API Gateway | Ingestion endpoint & CORS handling |
-| **Queue** | AWS SQS | Buffering async jobs, DLQ for failures |
-| **Worker Engine**| AWS Lambda (Python) | Serverless code chunking & AI orchestration |
-| **AI Engine** | Gemini 2.5 Flash-Lite | Fast, cheap context extraction with rigid JSON schema |
-| **Database** | Supabase (Postgres) | Persisting user jobs, status, and JSON reports |
-| **IaC** | AWS SAM | Infrastructure deployment and configuration |
+| Component | Technology | Purpose | Key Phase/V2 Updates |
+|-----------|-----------|---------|----------------------|
+| **Frontend** | Next.js 16 (App Router) | Responsive dashboard & UI elements | Upgraded from Next.js 15; added Turbopack support. |
+| **Auth** | GitHub OAuth via Supabase | Secure identity management | Handled by Supabase Auth Providers. |
+| **API Gateway** | AWS API Gateway | Ingestion endpoint & CORS handling | Proxies requests into the message queue. |
+| **Queue** | AWS SQS | Buffering async jobs, DLQ for failures | Managed via CloudFormation/SAM stack. |
+| **Worker Engine**| AWS Lambda (Python) | Serverless code chunking & AI orchestration | Structured using zero external dependency Python 3.12 modules. |
+| **AI Engine** | Gemini 2.5 Flash-Lite | Fast context extraction with response schema | Controlled via rigid JSON response definitions. |
+| **Database** | Supabase (Postgres) | Persisting user jobs and JSON reports | PostgreSQL tables protected with custom RLS. |
+| **Realtime Channel**| Supabase Client API | Push status updates to Dashboard | **[V2 Upgrade]** Replaced 4s interval polling with Postgres Realtime. |
+| **PDF Exporter** | HTML/CSS Print Layout | Print-friendly offline document creation | **[V2 Upgrade]** Cover page, code component metrics, and print styles. |
+| **Test Suite** | Pytest (Python 3) | Unit testing for backend modules | **[Phase 3 Update]** 64 unit tests validating path extraction & parsing. |
+| **IaC** | AWS SAM | Infrastructure deployment and configuration | Easily packages serverless triggers and configs. |
 
 ---
 

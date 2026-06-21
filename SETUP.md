@@ -125,3 +125,28 @@ When you're ready to share this with others:
    - Update your GitHub OAuth App's Homepage URL and Callback URL if necessary.
    - Update your Supabase Auth Site URL and Redirect URLs to your new Vercel domain.
    - Redeploy your AWS SAM stack, changing the `AllowedOrigin` parameter to your Vercel domain to secure your API Gateway.
+
+---
+
+## 8. Running Backend Unit Tests (Phase 3)
+
+The backend includes an offline unit test suite to validate repository downloading, code chunking, and payload construction.
+
+To run the unit tests locally:
+
+1. Navigate to the `backend` directory:
+   ```bash
+   cd backend
+   ```
+2. Run pytest:
+   ```bash
+   python3 -m pytest tests/ -v
+   ```
+
+### Test Suite Structure
+
+| Test File | Target Module | Scope |
+|-----------|---------------|-------|
+| `tests/test_repo_downloader.py` | `repo_downloader.py` | GitHub URL parsing and error code mapping |
+| `tests/test_code_chunker.py` | `code_chunker.py` | Extension filtering, directory pruning, and file truncation |
+| `tests/test_ai_engine.py` | `ai_engine.py` | AI payload serialization and mock response parsing |
