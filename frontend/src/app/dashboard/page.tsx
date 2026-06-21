@@ -7,7 +7,7 @@ import SubmissionForm from '@/components/SubmissionForm'
 import JobStatusCard from '@/components/JobStatusCard'
 import { useJobSubscription } from '@/hooks/useJobSubscription'
 import { createClient } from '@/lib/supabase'
-import type { UserProfile, Job } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export default function DashboardPage() {
   const router = useRouter()
